@@ -1,4 +1,4 @@
-package com.example.nando.ayamku;
+package com.nandohidayat.app.ayamku;
 
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -13,7 +13,6 @@ import android.widget.TextView;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 public class AyamDesc extends AppCompatActivity {
     ImageView ayamImage;

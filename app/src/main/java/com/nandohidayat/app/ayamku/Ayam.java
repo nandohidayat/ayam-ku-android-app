@@ -1,4 +1,4 @@
-package com.example.nando.ayamku;
+package com.nandohidayat.app.ayamku;
 
 import java.io.Serializable;
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.nando.ayamku">
+    package="com.nandohidayat.app.ayamku">
 
     <application
         android:allowBackup="true"
@@ -10,12 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.nandohidayat.app.ayamku.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
         <activity
-            android:name=".SplashActivity"
+            android:name="com.nandohidayat.app.ayamku.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,35 +24,35 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Login"
-            android:parentActivityName=".LoginAndRegister">
+            android:name="com.nandohidayat.app.ayamku.Login"
+            android:parentActivityName="com.nandohidayat.app.ayamku.LoginAndRegister">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Login">
+                android:value="com.nandohidayat.app.ayamku.Login">
             </meta-data>
         </activity>
-        <activity android:name=".LoginAndRegister"></activity>
-        <activity android:name=".Registration"></activity>
+        <activity android:name="com.nandohidayat.app.ayamku.LoginAndRegister"></activity>
+        <activity android:name="com.nandohidayat.app.ayamku.Registration"></activity>
         <activity
-            android:name=".Update"
-            android:parentActivityName=".MainActivity">
+            android:name="com.nandohidayat.app.ayamku.Update"
+            android:parentActivityName="com.nandohidayat.app.ayamku.MainActivity">
             <meta-data
-                android:value=".MainActivity"
+                android:value="com.nandohidayat.app.ayamku.MainActivity"
                 android:name="android.support.PARENT_ACTIVITY"></meta-data>
         </activity>
         <activity
-            android:name=".AyamDesc"
-            android:parentActivityName=".MainActivity">
+            android:name="com.nandohidayat.app.ayamku.AyamDesc"
+            android:parentActivityName="com.nandohidayat.app.ayamku.MainActivity">
             <meta-data
-                android:value=".MainActivity"
+                android:value="com.nandohidayat.app.ayamku.MainActivity"
                 android:name="android.support.PARENT_ACTIVITY">
             </meta-data>
         </activity>
         <activity
-            android:name=".Checkout"
-            android:parentActivityName=".MainActivity">
+            android:name="com.nandohidayat.app.ayamku.Checkout"
+            android:parentActivityName="com.nandohidayat.app.ayamku.MainActivity">
             <meta-data
-                android:value=".MainActivity"
+                android:value="com.nandohidayat.app.ayamku.MainActivity"
                 android:name="android.support.PARENT_ACTIVITY">
             </meta-data>
         </activity>
