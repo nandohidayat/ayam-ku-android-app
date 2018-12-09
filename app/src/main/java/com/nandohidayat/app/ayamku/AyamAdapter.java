@@ -36,7 +36,6 @@ public class AyamAdapter extends RecyclerView.Adapter<AyamAdapter.AyamViewHolder
     private Cursor mCursor = null;
 
     public AyamAdapter(ArrayList<Ayam> dataList, Activity activity, Context context) {
-        Log.d("ADAPTERCREATED", "ADAPTER CREATED");
         this.dataList = dataList;
         this.activity = activity;
         this.context = context;
@@ -51,21 +50,6 @@ public class AyamAdapter extends RecyclerView.Adapter<AyamAdapter.AyamViewHolder
 
     @Override
     public void onBindViewHolder(AyamAdapter.AyamViewHolder ayamViewHolder, int i) {
-//        AssetManager manager = activity.getAssets();
-        InputStream inputStream;
-//        try {
-//            inputStream = manager.open(dataList.get(i).getImage()+".jpg");
-//            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-//            System.out.print(dataList.get(i).getImage()+".jpg");
-//            ayamViewHolder.ayamImage.setImageBitmap(bitmap);
-//            inputStream.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        ayamViewHolder.ayamName.setText(dataList.get(i).getName());
-//        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
-//        ayamViewHolder.ayamPrice.setText("Rp " + decimalFormat.format(dataList.get(i).getPrice()));
-
         Cursor cursor =
                 context.getContentResolver().query(Uri.parse(
                         Contract.CONTENT_URI.toString()), null, null, null, "ASC");
@@ -101,14 +85,6 @@ public class AyamAdapter extends RecyclerView.Adapter<AyamAdapter.AyamViewHolder
 
     @Override
     public int getItemCount() {
-//        return (dataList != null) ? dataList.size() : 0;
-//        if (mCursor != null) {
-//            Log.d("CURSORCOUNT", mCursor.getCount() + "");
-//            return mCursor.getCount();
-//        } else {
-//            Log.d("CURSORCOUNT", "NOLLL");
-//            return -1;
-//        }
         Cursor cursor =
                 context.getContentResolver().query(
                         Contract.ROW_COUNT_URI, new String[] {"count(*) AS count"},

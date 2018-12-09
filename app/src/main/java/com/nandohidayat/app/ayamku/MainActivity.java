@@ -35,13 +35,10 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        addData();
-
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
         ayamAdapter = new AyamAdapter(ayams, this, this);
 
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         GridLayoutManager manager = new GridLayoutManager(this, 2);
 
         recyclerView.setLayoutManager(manager);
@@ -84,19 +81,6 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
     @Override
     protected void onDestroy() {
         super.onDestroy();
-    }
-
-    private void addData() {
-        ayams = new ArrayList<>();
-
-        ayams.add(new Ayam("ayam0", "Rusty Chicken Thighs", 23000.0, "Rave Review: \"Love this recipe! So easy and it's delicious without the hours of marinating. I'll toss this into my chicken and let it sit for 30 minutes then throw it on the BBQ, comes out great every time!\" — Rhonda Jay"));
-        ayams.add(new Ayam("ayam1", "Shoyu Chicken", 25000.0, "Rave Review: \"We love this recipe. This is one I cook often for my family. Even my picky eaters can't get enough.\" — happysoule"));
-        ayams.add(new Ayam("ayam2", "Chicken, Sausage", 30000.0, "Rave Review: \"Phenomenal. My meat-and-potatoes guy was practically licking his plate. Love the char on the potatoes, tasted even better the next day. Will definitely be making this again. So easy, and only had to dirty one dish.\" — Danielle Davis"));
-        ayams.add(new Ayam("ayam3", "Peanut Curry Chicken", 31000.0, "Rave Review: \"Excellent as is. Smooth and creamy. Nice balance of heat and sweet.\" — Tim"));
-        ayams.add(new Ayam("ayam4", "Baked Apricot Chicken", 26000.0, "Rave Review: \"Amazing recipe! Quick, easy and tastes so good. The sauce is so good drizzled over the white rice.\" — Jen Gambill"));
-        ayams.add(new Ayam("ayam5", "Baked Teriyaki Chicken", 25000.0, "Rave Review: \"Made exactly like recipe states and it is excellent! Did double the sauce. Highly recommend!\" — Holly"));
-        ayams.add(new Ayam("ayam6", "Greek Lemon Chicken", 33000.0, "Rave Review: \"This smelled so good while baking! You know it's good when your picky 13 yr old boy tells you it's the best chicken he's ever had!!\" — WestCoastMom"));
-        ayams.add(new Ayam("ayam7", "Honey-Garlic Chicken", 34000.0, "Rave Review: \"Easy to make and uses pantry staples. Always a very good thing! I doubled the chicken thighs (but not the rest of the ingredients) and put half in the freezer for a quick meal when I need it.\" — Paula"));
     }
 
     @Override
