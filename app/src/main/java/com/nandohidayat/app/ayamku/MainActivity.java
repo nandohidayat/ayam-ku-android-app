@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        addData();
+//        addData();
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
@@ -58,10 +58,14 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
 
     @Override
     public void onClick(View view, int position) {
-        final Ayam ayam = ayams.get(position);
+        Cursor cursor =
+                this.getContentResolver().query(Uri.parse(
+                        Contract.CONTENT_URI.toString()), null, null, null, "ASC");
+        cursor.moveToPosition(position);
+        double ayamPrice = cursor.getDouble(cursor.getColumnIndex(Contract.AyamList.KEY_PRICE));
         switch (view.getId()) {
             case R.id.ayamImage :
-                price = price + (float)ayam.getPrice();
+                price = price + (float)ayamPrice;
                 SplashActivity.editor.putFloat("price", price);
                 SplashActivity.editor.commit();
                 DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
@@ -70,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
             default:
                 SplashActivity.editor.putInt("idDesc", position);
                 Intent ayamDesc = new Intent(getApplicationContext(), AyamDesc.class);
-                ayamDesc.putExtra("ayam", ayam);
+                ayamDesc.putExtra("ayam", position);
                 startActivity(ayamDesc);
                 return;
         }
