@@ -87,15 +87,7 @@ public class AyamAdapter extends RecyclerView.Adapter<AyamAdapter.AyamViewHolder
                 desc = cursor.getString(indexDesc);
                 image = cursor.getString(indexImage);
 
-                try {
-                    File f = new File(image);
-                    Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
-                    ayamViewHolder.ayamImage.setImageBitmap(BitmapFactory.decodeFile(image));
-                } catch (IOException e) {
-                    Log.d("ERORKOMAK", "WASUUUU");
-                    e.printStackTrace();
-                }
-
+                ayamViewHolder.ayamImage.setImageBitmap(BitmapFactory.decodeFile(image));
                 ayamViewHolder.ayamName.setText(name);
                 DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
                 ayamViewHolder.ayamPrice.setText("Rp " + decimalFormat.format(price));
