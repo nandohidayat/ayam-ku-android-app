@@ -2,8 +2,10 @@ package com.nandohidayat.app.ayamku;
 
 import android.content.Intent;
 import android.content.res.AssetManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -18,37 +20,37 @@ public class AyamDesc extends AppCompatActivity {
     ImageView ayamImage;
     TextView ayamName, ayamPrice, ayamDesc;
     int ayamId;
-    Ayam ayam;
     Intent intent;
+    String name, desc, image;
+    double price;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.desc_item);
 
-        ayamId = SplashActivity.sh.getInt("idDesc", 0);
+        Cursor cursor =
+                this.getContentResolver().query(Uri.parse(
+                        Contract.CONTENT_URI.toString()), null, null, null, "ASC");
+
         intent = getIntent();
-        ayam = (Ayam) intent.getSerializableExtra("ayam");
+        ayamId = intent.getIntExtra("ayam", 0);
+        cursor.moveToPosition(ayamId);
+
+        name = cursor.getString(cursor.getColumnIndex(Contract.AyamList.KEY_NAME));
+        price = cursor.getDouble(cursor.getColumnIndex(Contract.AyamList.KEY_PRICE));
+        desc = cursor.getString(cursor.getColumnIndex(Contract.AyamList.KEY_DESC));
+        image = cursor.getString(cursor.getColumnIndex(Contract.AyamList.KEY_IMAGE));
 
         ayamImage = (ImageView) findViewById(R.id.ayamImage);
         ayamName = (TextView) findViewById(R.id.ayamName);
         ayamDesc = (TextView) findViewById(R.id.ayamDesc);
         ayamPrice = (TextView) findViewById(R.id.ayamPrice);
 
-        AssetManager manager = this.getAssets();
-        InputStream inputStream;
-        try {
-            inputStream = manager.open(ayam.getImage()+".jpg");
-            Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            System.out.print(ayam.getImage()+".jpg");
-            ayamImage.setImageBitmap(bitmap);
-            inputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        ayamName.setText(ayam.getName());
+        ayamImage.setImageBitmap(BitmapFactory.decodeFile(image));
+        ayamName.setText(name);
         DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
-        ayamPrice.setText("Rp " + decimalFormat.format(ayam.getPrice()));
-        ayamDesc.setText(ayam.getDesc());
+        ayamPrice.setText("Rp " + decimalFormat.format(price));
+        ayamDesc.setText(desc);
     }
 }
