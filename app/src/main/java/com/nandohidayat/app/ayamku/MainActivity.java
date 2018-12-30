@@ -3,6 +3,7 @@ package com.nandohidayat.app.ayamku;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +20,14 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -37,14 +47,8 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
-        ayamAdapter = new AyamAdapter(ayams, this, this);
+        getJSON("https://ayam-ku-nandohidayat.c9users.io/api/barang.php");
 
-        GridLayoutManager manager = new GridLayoutManager(this, 2);
-
-        recyclerView.setLayoutManager(manager);
-
-        recyclerView.setAdapter(ayamAdapter);
-        ayamAdapter.setClickListener(this);
         totalPrice = (TextView) findViewById(R.id.totalPrice);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         setSupportActionBar(myToolbar);
@@ -147,5 +151,67 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
     public void checkout(View view) {
         Intent intent = new Intent(getApplicationContext(), Checkout.class);
         startActivity(intent);
+    }
+
+    private void getJSON(final String urlWebService) {
+        class GetJSON extends AsyncTask<Void, Void, String> {
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+            }
+
+            @Override
+            protected void onPostExecute(String aVoid) {
+                super.onPostExecute(aVoid);
+                Toast.makeText(getApplicationContext(), aVoid, Toast.LENGTH_SHORT).show();
+                try {
+                    loadIntoListView(aVoid);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            protected String doInBackground(Void... voids) {
+                try {
+                    URL url = new URL(urlWebService);
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    StringBuilder sb = new StringBuilder();
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    String json;
+                    while ((json = bufferedReader.readLine()) != null) {
+                        sb.append(json + "\n");
+                    }
+                    return sb.toString().trim();
+                } catch (Exception e) {
+                    return null;
+                }
+            }
+        }
+        GetJSON getJSON = new GetJSON();
+        getJSON.execute();
+    }
+
+    private void loadIntoListView(String json) throws JSONException {
+        ayams = new ArrayList<>();
+        JSONArray jsonArray = new JSONArray(json);
+        String[] webchrz = new String[jsonArray.length()];
+        Log.d("ASPPP","Meh Ke isi");
+        for (int i = 0; i < jsonArray.length(); i++) {
+            Log.d("ASPPP","Ke isi");
+            JSONObject obj = jsonArray.getJSONObject(i);
+            String image = "https://ayam-ku-nandohidayat.c9users.io/img/uploads/" + obj.getString("image");
+            String name = obj.getString("nm_brg");
+            double price = obj.getDouble("harga");
+            String desc = obj.getString("desc");
+            ayams.add(new Ayam(image, name, price, desc));
+        }
+
+        ayamAdapter = new AyamAdapter(ayams, this, this);
+
+        GridLayoutManager manager = new GridLayoutManager(this, 2);
+        recyclerView.setLayoutManager(manager);
+        recyclerView.setAdapter(ayamAdapter);
+        ayamAdapter.setClickListener(this);
     }
 }
