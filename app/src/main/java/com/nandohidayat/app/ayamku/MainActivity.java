@@ -20,6 +20,8 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,11 +61,7 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
 
     @Override
     public void onClick(View view, int position) {
-        Cursor cursor =
-                this.getContentResolver().query(Uri.parse(
-                        Contract.CONTENT_URI.toString()), null, null, null, "ASC");
-        cursor.moveToPosition(position);
-        double ayamPrice = cursor.getDouble(cursor.getColumnIndex(Contract.AyamList.KEY_PRICE));
+        double ayamPrice = ayams.get(position).getPrice();
         switch (view.getId()) {
             case R.id.ayamImage :
                 price = price + (float)ayamPrice;
@@ -73,9 +71,9 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
                 totalPrice.setText("Rp " + decimalFormat.format(price));
                 return;
             default:
-                SplashActivity.editor.putInt("idDesc", position);
+                Gson gson = new Gson();
                 Intent ayamDesc = new Intent(getApplicationContext(), AyamDesc.class);
-                ayamDesc.putExtra("ayam", position);
+                ayamDesc.putExtra("ayam", gson.toJson(ayams.get(position)));
                 startActivity(ayamDesc);
                 return;
         }
@@ -163,7 +161,6 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
             @Override
             protected void onPostExecute(String aVoid) {
                 super.onPostExecute(aVoid);
-                Toast.makeText(getApplicationContext(), aVoid, Toast.LENGTH_SHORT).show();
                 try {
                     loadIntoListView(aVoid);
                 } catch (JSONException e) {
@@ -196,9 +193,7 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
         ayams = new ArrayList<>();
         JSONArray jsonArray = new JSONArray(json);
         String[] webchrz = new String[jsonArray.length()];
-        Log.d("ASPPP","Meh Ke isi");
         for (int i = 0; i < jsonArray.length(); i++) {
-            Log.d("ASPPP","Ke isi");
             JSONObject obj = jsonArray.getJSONObject(i);
             String image = "https://ayam-ku-nandohidayat.c9users.io/img/uploads/" + obj.getString("image");
             String name = obj.getString("nm_brg");
