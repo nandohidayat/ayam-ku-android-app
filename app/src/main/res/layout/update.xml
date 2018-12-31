@@ -36,6 +36,7 @@
             android:layout_height="wrap_content"
             android:hint="Username"
             android:inputType="text"
+            android:focusable="false"
             android:layout_marginBottom="16dp"/>
 
         <TextView
