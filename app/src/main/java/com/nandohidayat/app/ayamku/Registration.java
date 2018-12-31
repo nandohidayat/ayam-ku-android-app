@@ -99,7 +99,7 @@ public class Registration extends Activity implements View.OnClickListener {
                             @Override
                             public void run() {
                                 try {
-                                    if(response.body().string().equals("success")) {
+                                    if(response.body().string().contains("success")) {
                                         Toast.makeText(Registration.this, "Registration Successfull", Toast.LENGTH_LONG).show();
                                     } else {
                                         Toast.makeText(Registration.this, "Registration Failed", Toast.LENGTH_LONG).show();
@@ -117,10 +117,6 @@ public class Registration extends Activity implements View.OnClickListener {
 
             Intent sendtoLogin = new Intent(getApplicationContext(),
                     LoginAndRegister.class);
-
-            Toast.makeText(getApplicationContext(),
-                    "You have successfully registered", Toast.LENGTH_LONG)
-                    .show();
 
             startActivity(sendtoLogin);
 
