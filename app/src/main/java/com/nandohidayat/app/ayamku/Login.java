@@ -4,11 +4,28 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class Login extends Activity implements View.OnClickListener {
     String str_UserName, str_Password, str_getID, str_getPass;
@@ -27,14 +44,11 @@ public class Login extends Activity implements View.OnClickListener {
         /* data are saved in application through SplashActivity */
         /* only name and password is sufficient to make login */
 
-        str_getID = SplashActivity.sh.getString("name", null);
-        str_getPass = SplashActivity.sh.getString("password", null);
         login = (Button) findViewById(R.id.btn_login);
         edt_UName = (EditText) findViewById(R.id.edt_userName);
         edt_Password = (EditText) findViewById(R.id.edt_password);
 
         login.setOnClickListener(this);
-
     }
 
     @Override
@@ -45,57 +59,69 @@ public class Login extends Activity implements View.OnClickListener {
         str_Password = edt_Password.getText().toString();
 
         /* make edittext condition for empty, input etc match */
+        try {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
 
-        if (str_UserName.length() == 0 & str_Password.length() == 0) {
-            Toast.makeText(getApplicationContext(),
-                    "Please enter your login User Name and Password",
-                    Toast.LENGTH_LONG).show();
-        } else if (str_UserName.length() == 0) {
-            Toast.makeText(getApplicationContext(),
-                    "Please enter your User Name", Toast.LENGTH_LONG).show();
-        } else if (str_Password.length() == 0) {
-            Toast.makeText(getApplicationContext(),
-                    "Please enter your Password", Toast.LENGTH_LONG).show();
+            OkHttpClient client = new OkHttpClient();
+
+            HttpUrl.Builder builder = HttpUrl.parse("http://ayam-ku-nandohidayat.c9users.io/api/user/read.php").newBuilder();
+            builder.addQueryParameter("username", edt_UName.getText().toString());
+            builder.addQueryParameter("password", edt_Password.getText().toString());
+
+            String url = builder.build().toString();
+
+            Request request = new Request.Builder().url(url).build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+
+                }
+
+                @Override
+                public void onResponse(Call call, final Response response) throws IOException {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                try {
+                                    String data = response.body().string();
+                                    JSONArray jsonArray = new JSONArray(data);
+                                    JSONObject jsonObject = jsonArray.getJSONObject(0);
+
+                                    Log.d("URLNYA", jsonObject.getString("password"));
+                                    Log.d("URLNYA", md5(str_Password));
+
+                                    if(jsonObject.getInt("hak_akses") == 1) {
+                                        SplashActivity.editor.putString("loginTest", "true");
+                                        SplashActivity.editor.putString("name", jsonObject.getString("name"));
+                                        SplashActivity.editor.putString("username", jsonObject.getString("user_id"));
+                                        SplashActivity.editor.commit();
+
+                                        Toast.makeText(getApplicationContext(),
+                                                "Logging in...", Toast.LENGTH_LONG).show();
+
+                                        Intent sendToLogout = new Intent(getApplicationContext(),
+                                                MainActivity.class);
+
+                                        startActivity(sendToLogout);
+                                    } else {
+                                        Toast.makeText(Login.this, "Username or Password Incorect", Toast.LENGTH_LONG).show();
+                                    }
+                                } catch (JSONException e) {
+                                    Toast.makeText(Login.this, e.toString(), Toast.LENGTH_LONG).show();
+                                }
+                            } catch (IOException e) {
+                                Toast.makeText(Login.this, e.toString(), Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                }
+            });
+        } catch (Exception e) {
+            Toast.makeText(Login.this, e.toString(), Toast.LENGTH_LONG);
         }
-
-        else if (str_getID.matches("") && str_getPass.matches("")) {
-            Toast.makeText(getApplicationContext(),
-                    "Details does not belongs to any account",
-                    Toast.LENGTH_LONG).show();
-        }
-
-        else if (!(str_UserName.matches(str_getID))) {
-            Toast.makeText(getApplicationContext(),
-                    "Either login/password is incorrect", Toast.LENGTH_LONG)
-                    .show();
-        }
-
-        else if (!(str_getPass.matches(str_Password))) {
-            Toast.makeText(getApplicationContext(),
-                    "Either login/password is incorrect", Toast.LENGTH_LONG)
-                    .show();
-        }
-
-        else if ((str_getID.matches(str_UserName))
-                && (str_getPass.matches(str_Password))) {
-
-            /*
-             * dont forget to commit after doing the operation with shared
-             * preference
-             */
-            /* without commit data will not saved to shared preference */
-            SplashActivity.editor.putString("loginTest", "true");
-            SplashActivity.editor.commit();
-
-            Toast.makeText(getApplicationContext(),
-                    "Logging in...", Toast.LENGTH_LONG).show();
-
-            Intent sendToLogout = new Intent(getApplicationContext(),
-                    MainActivity.class);
-
-            startActivity(sendToLogout);
-        }
-
     }
 
     @Override
@@ -108,5 +134,24 @@ public class Login extends Activity implements View.OnClickListener {
             startActivity(intent);
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    public String md5(String s) {
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuffer hexString = new StringBuffer();
+            for (int i=0; i<messageDigest.length; i++)
+                hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+
+            return hexString.toString();
+        }catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }
