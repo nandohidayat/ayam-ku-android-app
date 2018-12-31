@@ -90,9 +90,6 @@ public class Login extends Activity implements View.OnClickListener {
                                     JSONArray jsonArray = new JSONArray(data);
                                     JSONObject jsonObject = jsonArray.getJSONObject(0);
 
-                                    Log.d("URLNYA", jsonObject.getString("password"));
-                                    Log.d("URLNYA", md5(str_Password));
-
                                     if(jsonObject.getInt("hak_akses") == 1) {
                                         SplashActivity.editor.putString("loginTest", "true");
                                         SplashActivity.editor.putString("name", jsonObject.getString("name"));
@@ -134,24 +131,5 @@ public class Login extends Activity implements View.OnClickListener {
             startActivity(intent);
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    public String md5(String s) {
-        try {
-            // Create MD5 Hash
-            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
-            digest.update(s.getBytes());
-            byte messageDigest[] = digest.digest();
-
-            // Create Hex String
-            StringBuffer hexString = new StringBuffer();
-            for (int i=0; i<messageDigest.length; i++)
-                hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
-
-            return hexString.toString();
-        }catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return "";
     }
 }

@@ -19,6 +19,14 @@
             android:id="@+id/edt_Rname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="Name"
+            android:inputType="text"
+            android:layout_marginBottom="16dp"/>
+
+        <EditText
+            android:id="@+id/edt_Ruser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:hint="Username"
             android:inputType="text"
             android:layout_marginBottom="16dp"/>
@@ -37,22 +45,6 @@
             android:layout_height="wrap_content"
             android:hint="Retype Password"
             android:inputType="textPassword"
-            android:layout_marginBottom="16dp"/>
-
-        <EditText
-            android:id="@+id/edt_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:layout_marginBottom="16dp"/>
-
-        <EditText
-            android:id="@+id/edt_Rmobile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Mobile"
-            android:inputType="number"
             android:layout_marginBottom="16dp"/>
 
         <Button
