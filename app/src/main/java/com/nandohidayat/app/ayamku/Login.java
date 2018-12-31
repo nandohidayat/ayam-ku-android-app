@@ -94,6 +94,7 @@ public class Login extends Activity implements View.OnClickListener {
                                         SplashActivity.editor.putString("loginTest", "true");
                                         SplashActivity.editor.putString("name", jsonObject.getString("name"));
                                         SplashActivity.editor.putString("username", jsonObject.getString("user_id"));
+                                        SplashActivity.editor.putString("password", jsonObject.getString("password"));
                                         SplashActivity.editor.commit();
 
                                         Toast.makeText(getApplicationContext(),
