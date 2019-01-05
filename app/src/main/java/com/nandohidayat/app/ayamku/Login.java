@@ -101,7 +101,7 @@ public class Login extends Activity implements View.OnClickListener {
                                                 "Logging in...", Toast.LENGTH_LONG).show();
 
                                         Intent sendToLogout = new Intent(getApplicationContext(),
-                                                MainActivity.class);
+                                                GeraiActivity.class);
 
                                         startActivity(sendToLogout);
                                     } else {
