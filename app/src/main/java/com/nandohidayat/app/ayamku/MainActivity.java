@@ -126,6 +126,10 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
                 Intent updateIntent = new Intent(this, Update.class);
                 startActivity(updateIntent);
                 return true;
+            case R.id.action_location:
+                Intent location = new Intent(this, GeraiActivity.class);
+                startActivity(location);
+                return true;
             case R.id.action_logout:
                 Toast.makeText(getApplicationContext(), "You have successfully logout",
                         Toast.LENGTH_LONG).show();
