@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
                 startActivity(sendIntent);
                 return true;
             case R.id.action_map:
-                String uri = String.format(Locale.ENGLISH, "geo:%s,%s", SplashActivity.sh.getString("latitude",null), SplashActivity.sh.getString("longitude", null));
+                String uri = "http://maps.google.com/maps?daddr=" + SplashActivity.sh.getString("latitude",null) + ',' + SplashActivity.sh.getString("longitude", null);
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                 startActivity(intent);
                 return true;
