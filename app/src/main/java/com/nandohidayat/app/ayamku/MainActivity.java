@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
-        getJSON("https://ayam-ku-nandohidayat.c9users.io/api/barang.php");
+        getJSON("https://ayam-ku-nandohidayat.c9users.io/api/stok.php?kd_gerai=G-0001");
 
         totalPrice = (TextView) findViewById(R.id.totalPrice);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
             JSONObject obj = jsonArray.getJSONObject(i);
             String image = "https://ayam-ku-nandohidayat.c9users.io/img/uploads/" + obj.getString("image");
             String name = obj.getString("nm_brg");
-            double price = obj.getDouble("harga");
+            double price = obj.getDouble("harga_jual");
             String desc = obj.getString("desc");
             ayams.add(new Ayam(image, name, price, desc));
         }
