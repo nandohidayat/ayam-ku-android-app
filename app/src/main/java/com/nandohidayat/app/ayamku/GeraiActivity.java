@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
@@ -25,6 +26,7 @@ public class GeraiActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_gerai);
 
         spinner = findViewById(R.id.list_gerai);
