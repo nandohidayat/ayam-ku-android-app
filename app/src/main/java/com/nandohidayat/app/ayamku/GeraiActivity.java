@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -65,8 +67,9 @@ public class GeraiActivity extends AppCompatActivity {
         go.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Gson gson = new Gson();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra(GERAI, gerais.get(spinner.getSelectedItemPosition()).kd_gerai);
+                intent.putExtra(GERAI, gson.toJson(gerais.get(spinner.getSelectedItemPosition())));
                 startActivity(intent);
             }
         });
