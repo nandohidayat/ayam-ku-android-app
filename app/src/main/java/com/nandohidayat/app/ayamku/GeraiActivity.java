@@ -1,12 +1,17 @@
 package com.nandohidayat.app.ayamku;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,9 +24,15 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class GeraiActivity extends AppCompatActivity {
+    public final static String GERAI = "com.nandohidayat.app.ayamku.gerai";
+
     ArrayList<Gerai> gerais;
 
     Spinner spinner;
+    TextView name;
+    TextView phone;
+    TextView sms;
+    Button go;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,8 +41,35 @@ public class GeraiActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gerai);
 
         spinner = findViewById(R.id.list_gerai);
+        name = findViewById(R.id.nama);
+        phone = findViewById(R.id.phone);
+        sms = findViewById(R.id.sms);
+        go = findViewById(R.id.go);
 
         getJSON("http://ayam-ku-nandohidayat.c9users.io/api/gerai.php");
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                name.setText(gerais.get(position).nama);
+                phone.setText(gerais.get(position).phone);
+                sms.setText(gerais.get(position).sms);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        go.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.putExtra(GERAI, gerais.get(spinner.getSelectedItemPosition()).kd_gerai);
+                startActivity(intent);
+            }
+        });
     }
 
     private void getJSON(final String urlWebService) {
