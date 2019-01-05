@@ -35,12 +35,14 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemClickListener {
+
     private RecyclerView recyclerView;
     private AyamAdapter ayamAdapter;
     private ArrayList<Ayam> ayams;
     private TextView totalPrice;
     private float price;
     private String name;
+    private Gerai gerai;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,10 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
-        getJSON("https://ayam-ku-nandohidayat.c9users.io/api/stok.php?kd_gerai=G-0001");
+        Intent intent = getIntent();
+        Gson gson = new Gson();
+        gerai = gson.fromJson(intent.getStringExtra("gerai"), Gerai.class);
+        getJSON("https://ayam-ku-nandohidayat.c9users.io/api/stok.php?kd_gerai=" + gerai.kd_gerai);
 
         totalPrice = (TextView) findViewById(R.id.totalPrice);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -89,9 +94,8 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             Intent intent = new Intent(MainActivity.this,
-                    SplashActivity.class);
+                    GeraiActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.putExtra("EXIT", true);
             startActivity(intent);
         }
         return super.onKeyDown(keyCode, event);

@@ -5,6 +5,8 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
@@ -26,7 +28,6 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class GeraiActivity extends AppCompatActivity {
-    public final static String GERAI = "com.nandohidayat.app.ayamku.gerai";
 
     ArrayList<Gerai> gerais;
 
@@ -69,10 +70,22 @@ public class GeraiActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Gson gson = new Gson();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra(GERAI, gson.toJson(gerais.get(spinner.getSelectedItemPosition())));
+                intent.putExtra("gerai", gson.toJson(gerais.get(spinner.getSelectedItemPosition())));
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent(getApplicationContext(),
+                    SplashActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("EXIT", true);
+            startActivity(intent);
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     private void getJSON(final String urlWebService) {
