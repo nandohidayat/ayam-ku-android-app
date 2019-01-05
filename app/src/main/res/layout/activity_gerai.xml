@@ -41,7 +41,7 @@
             android:id="@+id/nama"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Gerai Mangkang"
+            android:text=""
             android:textStyle="bold"/>
     </LinearLayout>
 
@@ -61,7 +61,7 @@
             android:id="@+id/phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="083842327765"
+            android:text=""
             android:textStyle="bold"/>
     </LinearLayout>
 
@@ -81,7 +81,7 @@
             android:id="@+id/sms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="083842327765"
+            android:text=""
             android:textStyle="bold"/>
     </LinearLayout>
 

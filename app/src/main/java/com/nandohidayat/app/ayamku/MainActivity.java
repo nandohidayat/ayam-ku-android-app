@@ -35,14 +35,13 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemClickListener {
+    public final static String GERAI = "com.nandohidayat.app.ayamku.gerai";
 
     private RecyclerView recyclerView;
     private AyamAdapter ayamAdapter;
     private ArrayList<Ayam> ayams;
     private TextView totalPrice;
     private float price;
-    private String name;
-    private Gerai gerai;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +50,7 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
-        Intent intent = getIntent();
-        Gson gson = new Gson();
-        gerai = gson.fromJson(intent.getStringExtra("gerai"), Gerai.class);
-        getJSON("https://ayam-ku-nandohidayat.c9users.io/api/stok.php?kd_gerai=" + gerai.kd_gerai);
+        getJSON("https://ayam-ku-nandohidayat.c9users.io/api/stok.php?kd_gerai=" + SplashActivity.sh.getString("kd_gerai", null));
 
         totalPrice = (TextView) findViewById(R.id.totalPrice);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
@@ -111,18 +107,18 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
         switch (item.getItemId()) {
             case R.id.action_call:
                 Intent phoneIntent = new Intent(Intent.ACTION_DIAL, Uri.fromParts(
-                        "tel", "+6283842327765", null));
+                        "tel", SplashActivity.sh.getString("phone", null), null));
                 startActivity(phoneIntent);
                 return true;
 
             case R.id.action_sms:
                 Intent sendIntent = new Intent(Intent.ACTION_VIEW);
-                sendIntent.setData(Uri.parse("sms:" + "+6283842327765"));
+                sendIntent.setData(Uri.parse("sms:" + SplashActivity.sh.getString("sms", null)));
                 sendIntent.putExtra("sms-body", "Hi, i want to make an order");
                 startActivity(sendIntent);
                 return true;
             case R.id.action_map:
-                String uri = String.format(Locale.ENGLISH, "geo:%f,%f", -6.982248, 110.409244);
+                String uri = String.format(Locale.ENGLISH, "geo:%s,%s", SplashActivity.sh.getString("latitude",null), SplashActivity.sh.getString("longitude", null));
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                 startActivity(intent);
                 return true;

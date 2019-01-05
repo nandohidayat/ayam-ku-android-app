@@ -68,9 +68,13 @@ public class GeraiActivity extends AppCompatActivity {
         go.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Gson gson = new Gson();
+                SplashActivity.editor.putString("kd_gerai", gerais.get(spinner.getSelectedItemPosition()).kd_gerai);
+                SplashActivity.editor.putString("phone", gerais.get(spinner.getSelectedItemPosition()).phone);
+                SplashActivity.editor.putString("sms", gerais.get(spinner.getSelectedItemPosition()).sms);
+                SplashActivity.editor.putString("latitude", gerais.get(spinner.getSelectedItemPosition()).latitude);
+                SplashActivity.editor.putString("longitude", gerais.get(spinner.getSelectedItemPosition()).longitude);
+                SplashActivity.editor.commit();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.putExtra("gerai", gson.toJson(gerais.get(spinner.getSelectedItemPosition())));
                 startActivity(intent);
             }
         });
