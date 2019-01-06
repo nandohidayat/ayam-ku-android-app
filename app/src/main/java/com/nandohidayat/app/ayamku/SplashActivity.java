@@ -28,6 +28,7 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         SplashActivity.editor.putFloat("price", 0);
+        SplashActivity.editor.putString("items", null);
         SplashActivity.editor.commit();
 
         new Handler().postDelayed(new Runnable() {

@@ -63,21 +63,27 @@ public class Checkout extends AppCompatActivity {
             items = new ArrayList<>();
         else
             items = gson.fromJson(json, type);
+        Log.d("HAHA", items.size() + " Lol");
 
 
         for(String s : items) {
+            int find = 0;
+            CheckoutModel model = new CheckoutModel("", 0, 0);
             for(Ayam a : ayams) {
                 if(a.getName().equals(s)) {
-                    CheckoutModel model = new CheckoutModel(a.getName(), a.getPrice(), 1);
-                    if(models.contains(model)) {
-                        for(int i = 0; i < models.size(); i++) {
-                            if(models.get(i).equals(model)) {
-                                models.get(i).setMany(models.get(i).getMany() + 1);
-                            }
+                     find = 1;
+                     model = new CheckoutModel(a.getName(), a.getPrice(), 1);
+                }
+            }
+            if(find == 1) {
+                if(models.contains(model)) {
+                    for(int i = 0; i < models.size(); i++) {
+                        if(models.get(i).equals(model)) {
+                            models.get(i).setMany(models.get(i).getMany() + 1);
                         }
-                    } else {
-                        models.add(model);
                     }
+                } else {
+                    models.add(model);
                 }
             }
         }
