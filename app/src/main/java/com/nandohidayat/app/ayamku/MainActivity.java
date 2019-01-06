@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +29,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.DecimalFormat;
@@ -35,13 +37,13 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemClickListener {
-    public final static String GERAI = "com.nandohidayat.app.ayamku.gerai";
 
     private RecyclerView recyclerView;
     private AyamAdapter ayamAdapter;
     private ArrayList<Ayam> ayams;
     private TextView totalPrice;
     private float price;
+    private ArrayList<String> items;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,14 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
         setContentView(R.layout.activity_main);
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+
+        Gson gson = new Gson();
+        String json = SplashActivity.sh.getString("items", null);
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        if(json == null)
+            items = new ArrayList<>();
+        else
+            items = gson.fromJson(json, type);
 
         getJSON("https://ayam-ku-nandohidayat.c9users.io/api/stok.php?kd_gerai=" + SplashActivity.sh.getString("kd_gerai", null));
 
@@ -63,8 +73,17 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
     @Override
     public void onClick(View view, int position) {
         double ayamPrice = ayams.get(position).getPrice();
+        Gson gson = new Gson();
+        String json;
+
         switch (view.getId()) {
             case R.id.ayamImage :
+                items.add(ayams.get(position).getName());
+
+                json = gson.toJson(items);
+                SplashActivity.editor.putString("items", json);
+                SplashActivity.editor.apply();
+
                 price = price + (float)ayamPrice;
                 SplashActivity.editor.putFloat("price", price);
                 SplashActivity.editor.commit();
@@ -72,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
                 totalPrice.setText("Rp " + decimalFormat.format(price));
                 return;
             default:
-                Gson gson = new Gson();
                 Intent ayamDesc = new Intent(getApplicationContext(), AyamDesc.class);
                 ayamDesc.putExtra("ayam", gson.toJson(ayams.get(position)));
                 startActivity(ayamDesc);
