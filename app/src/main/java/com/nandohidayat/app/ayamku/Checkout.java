@@ -125,6 +125,7 @@ public class Checkout extends AppCompatActivity {
             OkHttpClient client = new OkHttpClient();
 
             HttpUrl.Builder builder = HttpUrl.parse("http://ayam-ku-nandohidayat.c9users.io/api/jual/create.php").newBuilder();
+            builder.addQueryParameter("gerai", SplashActivity.sh.getString("kd_gerai", null));
             builder.addQueryParameter("username", SplashActivity.sh.getString("username", null));
             builder.addQueryParameter("total", price + "");
             builder.addQueryParameter("bayar", pay + "");
