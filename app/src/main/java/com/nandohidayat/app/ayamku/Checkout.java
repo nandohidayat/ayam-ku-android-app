@@ -70,7 +70,7 @@ public class Checkout extends AppCompatActivity {
             int find = 0;
             CheckoutModel model = new CheckoutModel("", 0, 0);
             for(Ayam a : ayams) {
-                if(a.getName().equals(s)) {
+                if(a.getKd_brg().equals(s)) {
                      find = 1;
                      model = new CheckoutModel(a.getName(), a.getPrice(), 1);
                 }

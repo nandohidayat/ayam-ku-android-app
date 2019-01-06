@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
 
         switch (view.getId()) {
             case R.id.ayamImage :
-                items.add(ayams.get(position).getName());
+                items.add(ayams.get(position).getKd_brg());
 
                 json = gson.toJson(items);
                 SplashActivity.editor.putString("items", json);
@@ -220,11 +220,12 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
         String[] webchrz = new String[jsonArray.length()];
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject obj = jsonArray.getJSONObject(i);
+            String kd_brg = obj.getString("kd_brg");
             String image = "https://ayam-ku-nandohidayat.c9users.io/img/uploads/" + obj.getString("image");
             String name = obj.getString("nm_brg");
             double price = obj.getDouble("harga_jual");
             String desc = obj.getString("desc");
-            ayams.add(new Ayam(image, name, price, desc));
+            ayams.add(new Ayam(kd_brg, image, name, price, desc));
         }
 
         ayamAdapter = new AyamAdapter(ayams, this, this);
