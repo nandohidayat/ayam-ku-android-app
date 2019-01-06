@@ -128,6 +128,9 @@ public class Checkout extends AppCompatActivity {
             builder.addQueryParameter("username", SplashActivity.sh.getString("username", null));
             builder.addQueryParameter("total", price + "");
             builder.addQueryParameter("bayar", pay + "");
+            for(String s : items) {
+                builder.addQueryParameter("items[]", s);
+            }
 
             String url = builder.build().toString();
 
@@ -149,7 +152,7 @@ public class Checkout extends AppCompatActivity {
                                     String data = response.body().string();
                                     JSONArray jsonArray = new JSONArray(data);
                                     JSONObject jsonObject = jsonArray.getJSONObject(0);
-                                    String status = jsonObject.getString("status");
+                                    String status = jsonObject.getString("status1");
 
                                     if(status.contains("success")) {
                                         Toast.makeText(Checkout.this, "Payment Successfull", Toast.LENGTH_LONG).show();
@@ -173,6 +176,7 @@ public class Checkout extends AppCompatActivity {
         }
 
         SplashActivity.editor.putFloat("price", 0.0f);
+        SplashActivity.editor.putString("items", null);
         SplashActivity.editor.commit();
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
