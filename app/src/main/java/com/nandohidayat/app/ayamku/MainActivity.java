@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
     private TextView totalPrice;
     private float price;
     private ArrayList<String> items;
+    private ArrayList<CheckoutModel> models;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,6 +171,8 @@ public class MainActivity extends AppCompatActivity implements AyamAdapter.ItemC
 
     public void checkout(View view) {
         Intent intent = new Intent(getApplicationContext(), Checkout.class);
+        intent.putExtra("ayams", ayams);
+
         startActivity(intent);
     }
 

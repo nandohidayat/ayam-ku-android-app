@@ -11,14 +11,20 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -30,6 +36,10 @@ import okhttp3.Response;
 public class Checkout extends AppCompatActivity {
     EditText totalPrice, payAmount, change;
     double price, pay, changes;
+    ListView listView;
+    ArrayList<String> items;
+    ArrayList<CheckoutModel> models = new ArrayList<>();
+    ArrayList<Ayam> ayams = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,6 +50,40 @@ public class Checkout extends AppCompatActivity {
         totalPrice = (EditText) findViewById(R.id.totalPrice);
         payAmount = (EditText) findViewById(R.id.payAmount);
         change = (EditText) findViewById(R.id.change);
+        listView = findViewById(R.id.list_model);
+
+        Gson gson = new Gson();
+
+        Intent intent = getIntent();
+        ayams = (ArrayList<Ayam>) intent.getSerializableExtra("ayams");
+
+        String json = SplashActivity.sh.getString("items", null);
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        if(json == null)
+            items = new ArrayList<>();
+        else
+            items = gson.fromJson(json, type);
+
+
+        for(String s : items) {
+            for(Ayam a : ayams) {
+                if(a.getName().equals(s)) {
+                    CheckoutModel model = new CheckoutModel(a.getName(), a.getPrice(), 1);
+                    if(models.contains(model)) {
+                        for(int i = 0; i < models.size(); i++) {
+                            if(models.get(i).equals(model)) {
+                                models.get(i).setMany(models.get(i).getMany() + 1);
+                            }
+                        }
+                    } else {
+                        models.add(model);
+                    }
+                }
+            }
+        }
+
+        CheckoutList checkoutList = new CheckoutList(Checkout.this, models);
+        listView.setAdapter(checkoutList);
 
         final DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
         totalPrice.setText("Rp " + decimalFormat.format(price));
